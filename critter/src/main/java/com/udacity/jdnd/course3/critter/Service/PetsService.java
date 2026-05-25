@@ -2,8 +2,8 @@ package com.udacity.jdnd.course3.critter.Service;
 
 import com.udacity.jdnd.course3.critter.Repository.CustomersRepository;
 import com.udacity.jdnd.course3.critter.Repository.PetsRepository;
-import com.udacity.jdnd.course3.critter.Entity.Customer;
-import com.udacity.jdnd.course3.critter.Entity.Pet;
+import com.udacity.jdnd.course3.critter.Entities.Customer;
+import com.udacity.jdnd.course3.critter.Entities.Pet;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

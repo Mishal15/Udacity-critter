@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.Entity;
+package com.udacity.jdnd.course3.critter.Entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

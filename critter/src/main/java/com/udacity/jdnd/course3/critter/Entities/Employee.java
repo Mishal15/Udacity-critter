@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.Entity;
+package com.udacity.jdnd.course3.critter.Entities;
 
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import jakarta.persistence.*;
@@ -25,8 +25,5 @@ public class Employee implements Serializable {
 
     @ElementCollection
     private Set<DayOfWeek> daysAvailable;
-    public Set<EmployeeSkill> getSkills() {
-        return skills;
-    }
 
 }

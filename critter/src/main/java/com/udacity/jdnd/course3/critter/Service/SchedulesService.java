@@ -4,10 +4,10 @@ import com.udacity.jdnd.course3.critter.Repository.CustomersRepository;
 import com.udacity.jdnd.course3.critter.Repository.EmployeesRepository;
 import com.udacity.jdnd.course3.critter.Repository.PetsRepository;
 import com.udacity.jdnd.course3.critter.Repository.SchedulesRepository;
-import com.udacity.jdnd.course3.critter.Entity.Customer;
-import com.udacity.jdnd.course3.critter.Entity.Employee;
-import com.udacity.jdnd.course3.critter.Entity.Pet;
-import com.udacity.jdnd.course3.critter.Entity.Schedule;
+import com.udacity.jdnd.course3.critter.Entities.Customer;
+import com.udacity.jdnd.course3.critter.Entities.Employee;
+import com.udacity.jdnd.course3.critter.Entities.Pet;
+import com.udacity.jdnd.course3.critter.Entities.Schedule;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

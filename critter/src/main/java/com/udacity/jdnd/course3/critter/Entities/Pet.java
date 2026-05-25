@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.Entity;
+package com.udacity.jdnd.course3.critter.Entities;
 
 import com.udacity.jdnd.course3.critter.pet.PetType;
 import jakarta.persistence.*;

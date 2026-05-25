@@ -1,7 +1,7 @@
 package com.udacity.jdnd.course3.critter.Service;
 
 import com.udacity.jdnd.course3.critter.Repository.EmployeesRepository;
-import com.udacity.jdnd.course3.critter.Entity.Employee;
+import com.udacity.jdnd.course3.critter.Entities.Employee;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
