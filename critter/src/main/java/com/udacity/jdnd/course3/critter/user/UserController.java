@@ -1,92 +1,92 @@
 package com.udacity.jdnd.course3.critter.user;
-
-import com.udacity.jdnd.course3.critter.Service.CustomersService;
-import com.udacity.jdnd.course3.critter.Service.EmployeesService;
 import com.udacity.jdnd.course3.critter.Entities.Customer;
 import com.udacity.jdnd.course3.critter.Entities.Employee;
 import com.udacity.jdnd.course3.critter.Entities.Pet;
+import com.udacity.jdnd.course3.critter.service.CustomersService;
+import com.udacity.jdnd.course3.critter.service.EmployeesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 /**
  * Handles web requests related to Users.
- *
- * Includes requests for both customers and employees. Splitting this into separate user and customer controllers
- * would be fine too, though that is not part of the required scope for this class.
+ * Includes requests for both customers and employees.
  */
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
     @Autowired
-    private CustomersService customersService;
-
+    private CustomersService customerService;
     @Autowired
-    private EmployeesService employeesService;
-
+    private EmployeesService employeeService;
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setName(customerDTO.getName());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
         customer.setNotes(customerDTO.getNotes());
-        List<Long> petIds = customerDTO.getPetIds();
-        return getCustomerDTO(customersService.saveCustomer(customer, petIds));
-    }
 
+        Customer savedCustomer = customerService.saveCustomer(customer);
+        return convertCustomerToDTO(savedCustomer);
+    }
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
-        List<Customer> customers = customersService.getAllCustomers();
-        return customers.stream().map(this::getCustomerDTO).collect(Collectors.toList());
+        List<Customer> customers = customerService.getAllCustomers();
+        return customers.stream()
+                .map(this::convertCustomerToDTO)
+                .collect(Collectors.toList());
     }
-
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
-        return getCustomerDTO(customersService.getCustomerByPetId(petId));
+        Customer owner = customerService.getOwnerByPetId(petId);
+        return convertCustomerToDTO(owner);
     }
-
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         employee.setName(employeeDTO.getName());
         employee.setSkills(employeeDTO.getSkills());
         employee.setDaysAvailable(employeeDTO.getDaysAvailable());
-        return getEmployeeDTO(employeesService.saveEmployee(employee));
-    }
 
+        Employee savedEmployee = employeeService.saveEmployee(employee);
+        return convertEmployeeToDTO(savedEmployee);
+    }
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        return getEmployeeDTO(employeesService.getEmployeeById(employeeId));
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        return convertEmployeeToDTO(employee);
     }
-
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        employeesService.setEmployeeAvailability(daysAvailable, employeeId);
+        employeeService.setAvailability(daysAvailable, employeeId);
     }
-
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        List<Employee> employees = employeesService.getEmployeesForService(employeeDTO.getDate(), employeeDTO.getSkills());
-        return employees.stream().map(this::getEmployeeDTO).collect(Collectors.toList());
+        List<Employee> availableEmployees = employeeService.findEmployeesForService(
+                employeeDTO.getDate(), employeeDTO.getSkills());
+        return availableEmployees.stream()
+                .map(this::convertEmployeeToDTO)
+                .collect(Collectors.toList());
     }
-
-    private CustomerDTO getCustomerDTO(Customer customer) {
+    private CustomerDTO convertCustomerToDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(customer.getId());
         customerDTO.setName(customer.getName());
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setNotes(customer.getNotes());
-        List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
-        customerDTO.setPetIds(petIds);
+        if (customer.getPets() != null) {
+            customerDTO.setPetIds(customer.getPets().stream()
+                    .map(Pet::getId)
+                    .collect(Collectors.toList()));
+        } else {
+            customerDTO.setPetIds(new ArrayList<>());
+        }
         return customerDTO;
     }
-
-    private EmployeeDTO getEmployeeDTO(Employee employee) {
+    private EmployeeDTO convertEmployeeToDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
         employeeDTO.setName(employee.getName());

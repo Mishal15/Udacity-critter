@@ -1,23 +1,18 @@
 package com.udacity.jdnd.course3.critter.pet;
-
-import com.udacity.jdnd.course3.critter.Service.PetsService;
 import com.udacity.jdnd.course3.critter.Entities.Pet;
+import com.udacity.jdnd.course3.critter.service.PetsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 /**
  * Handles web requests related to Pets.
  */
 @RestController
 @RequestMapping("/pet")
 public class PetController {
-
     @Autowired
-    private PetsService petsService;
-
+    private PetsService petService;
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = new Pet();
@@ -25,34 +20,39 @@ public class PetController {
         pet.setName(petDTO.getName());
         pet.setBirthDate(petDTO.getBirthDate());
         pet.setNotes(petDTO.getNotes());
-        return getPetDTO(petsService.savePet(pet,petDTO.getOwnerId()));
-    }
 
+        Pet savedPet = petService.savePet(pet, petDTO.getOwnerId());
+        return convertPetToDTO(savedPet);
+    }
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        return getPetDTO(petsService.getPetById(petId));
+        Pet pet = petService.getPetById(petId);
+        return convertPetToDTO(pet);
     }
-
     @GetMapping
-    public List<PetDTO> getPets(){
-        List<Pet> pets = petsService.getAllPets();
-        return pets.stream().map(this::getPetDTO).collect(Collectors.toList());
+    public List<PetDTO> getPets() {
+        List<Pet> pets = petService.getAllPets();
+        return pets.stream()
+                .map(this::convertPetToDTO)
+                .collect(Collectors.toList());
     }
-
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        List<Pet> pets = petsService.getPetsByCustomerId(ownerId);
-        return pets.stream().map(this::getPetDTO).collect(Collectors.toList());
+        List<Pet> pets = petService.getPetsByOwnerId(ownerId);
+        return pets.stream()
+                .map(this::convertPetToDTO)
+                .collect(Collectors.toList());
     }
-
-    private PetDTO getPetDTO(Pet pet){
+    private PetDTO convertPetToDTO(Pet pet) {
         PetDTO petDTO = new PetDTO();
+        petDTO.setId(pet.getId());
         petDTO.setType(pet.getType());
         petDTO.setName(pet.getName());
         petDTO.setBirthDate(pet.getBirthDate());
         petDTO.setNotes(pet.getNotes());
-        petDTO.setOwnerId(pet.getCustomer().getId());
-        petDTO.setId(pet.getId());
+        if (pet.getCustomer() != null) {
+            petDTO.setOwnerId(pet.getCustomer().getId());
+        }
         return petDTO;
     }
 }
