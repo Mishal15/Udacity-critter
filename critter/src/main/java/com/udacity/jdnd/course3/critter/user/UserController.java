@@ -24,20 +24,21 @@ public class UserController {
     private EmployeesService employeeService;
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer cController = new Customer();
-        cController.setName(customerDTO.getName());
-        cController.setPhoneNumber(customerDTO.getPhoneNumber());
-        cController.setNotes(customerDTO.getNotes());
-
-        Customer savedCustomer = customerService.saveCustomer(cController);
+        Customer customer = createCustomerEntity(customerDTO);
+        Customer savedCustomer = customerService.saveCustomer(customer);
         return convertCustomerToDTO(savedCustomer);
+
     }
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
-        return customers.stream()
-                .map(this::convertCustomerToDTO)
-                .collect(Collectors.toList());
+        List<CustomerDTO> response = new ArrayList<>();
+
+        for (Customer customer : customers) {
+            response.add(convertCustomerToDTO(customer));
+        }
+
+        return response;
     }
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
@@ -46,11 +47,7 @@ public class UserController {
     }
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        employee.setName(employeeDTO.getName());
-        employee.setSkills(employeeDTO.getSkills());
-        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
-
+        Employee employee = createEmployeeEntity(employeeDTO);
         Employee savedEmployee = employeeService.saveEmployee(employee);
         return convertEmployeeToDTO(savedEmployee);
     }
@@ -65,11 +62,34 @@ public class UserController {
     }
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        List<Employee> availableEmployees = employeeService.findEmployeesForService(
-                employeeDTO.getDate(), employeeDTO.getSkills());
-        return availableEmployees.stream()
-                .map(this::convertEmployeeToDTO)
-                .collect(Collectors.toList());
+        List<Employee> employees = employeeService.findEmployeesForService(
+                employeeDTO.getDate(),
+                employeeDTO.getSkills()
+        );
+
+        List<EmployeeDTO> response = new ArrayList<>();
+
+        for (Employee employee : employees) {
+            response.add(convertEmployeeToDTO(employee));
+        }
+
+        return response;
+
+
+    }
+    private Employee createEmployeeEntity(EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setSkills(employeeDTO.getSkills());
+        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        return employee;
+    }
+    private Customer createCustomerEntity(CustomerDTO customerDTO){
+        Customer cController = new Customer();
+        cController.setName(customerDTO.getName());
+        cController.setPhoneNumber(customerDTO.getPhoneNumber());
+        cController.setNotes(customerDTO.getNotes());
+        return cController;
     }
     private CustomerDTO convertCustomerToDTO(Customer customer) {
         CustomerDTO cControllerDTO = new CustomerDTO();

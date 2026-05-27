@@ -18,42 +18,68 @@ public class ScheduleController {
     private SchedulesService scheduleService;
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        Schedule sController = new Schedule();
-        sController.setDate(scheduleDTO.getDate());
-        sController.setActivities(scheduleDTO.getActivities());
+        Schedule schedule = buildScheduleEntity(scheduleDTO);
 
-        Schedule savedSchedule = scheduleService.createSchedule(sController,
-                scheduleDTO.getEmployeeIds(), scheduleDTO.getPetIds());
+        Schedule savedSchedule = scheduleService.createSchedule(
+                schedule,
+                scheduleDTO.getEmployeeIds(),
+                scheduleDTO.getPetIds()
+        );
+
         return convertScheduleToDTO(savedSchedule);
     }
+
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
         List<Schedule> schedules = scheduleService.getAllSchedules();
-        return schedules.stream()
-                .map(this::convertScheduleToDTO)
-                .collect(Collectors.toList());
+        List<ScheduleDTO> response = new ArrayList<>();
+
+        for (Schedule schedule : schedules) {
+            response.add(convertScheduleToDTO(schedule));
+        }
+
+        return response;
     }
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
         List<Schedule> schedules = scheduleService.getScheduleForPet(petId);
-        return schedules.stream()
-                .map(this::convertScheduleToDTO)
-                .collect(Collectors.toList());
+        List<ScheduleDTO> response = new ArrayList<>();
+
+        for (Schedule schedule : schedules) {
+            response.add(convertScheduleToDTO(schedule));
+        }
+
+        return response;
     }
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
         List<Schedule> schedules = scheduleService.getScheduleForEmployee(employeeId);
-        return schedules.stream()
-                .map(this::convertScheduleToDTO)
-                .collect(Collectors.toList());
+        List<ScheduleDTO> response = new ArrayList<>();
+
+        for (Schedule schedule : schedules) {
+            response.add(convertScheduleToDTO(schedule));
+        }
+
+        return response;
     }
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         List<Schedule> schedules = scheduleService.getScheduleForCustomer(customerId);
-        return schedules.stream()
-                .map(this::convertScheduleToDTO)
-                .collect(Collectors.toList());
+        List<ScheduleDTO> response = new ArrayList<>();
+
+        for (Schedule schedule : schedules) {
+            response.add(convertScheduleToDTO(schedule));
+        }
+
+        return response;
     }
+    private Schedule buildScheduleEntity(ScheduleDTO scheduleDTO) {
+        Schedule sController = new Schedule();
+        sController.setDate(scheduleDTO.getDate());
+        sController.setActivities(scheduleDTO.getActivities());
+        return sController;
+    }
+
     private ScheduleDTO convertScheduleToDTO(Schedule schedule) {
         ScheduleDTO sControllerDTO = new ScheduleDTO();
         sControllerDTO.setId(schedule.getId());
