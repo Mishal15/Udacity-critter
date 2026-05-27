@@ -1,11 +1,14 @@
 package com.udacity.jdnd.course3.critter.Entities;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 @Entity
 @Table(name = "schedule")
+@Data
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

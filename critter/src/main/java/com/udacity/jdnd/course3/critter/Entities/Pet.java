@@ -1,10 +1,13 @@
 package com.udacity.jdnd.course3.critter.Entities;
 import com.udacity.jdnd.course3.critter.pet.PetType;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "pet")
+@Data
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

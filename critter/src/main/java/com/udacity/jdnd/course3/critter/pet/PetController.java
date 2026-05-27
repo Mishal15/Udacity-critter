@@ -15,13 +15,13 @@ public class PetController {
     private PetsService petService;
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        Pet pet = new Pet();
-        pet.setType(petDTO.getType());
-        pet.setName(petDTO.getName());
-        pet.setBirthDate(petDTO.getBirthDate());
-        pet.setNotes(petDTO.getNotes());
+        Pet controller = new Pet();
+        controller.setType(petDTO.getType());
+        controller.setName(petDTO.getName());
+        controller.setBirthDate(petDTO.getBirthDate());
+        controller.setNotes(petDTO.getNotes());
 
-        Pet savedPet = petService.savePet(pet, petDTO.getOwnerId());
+        Pet savedPet = petService.savePet(controller, petDTO.getOwnerId());
         return convertPetToDTO(savedPet);
     }
     @GetMapping("/{petId}")
@@ -44,15 +44,15 @@ public class PetController {
                 .collect(Collectors.toList());
     }
     private PetDTO convertPetToDTO(Pet pet) {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setId(pet.getId());
-        petDTO.setType(pet.getType());
-        petDTO.setName(pet.getName());
-        petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setNotes(pet.getNotes());
+        PetDTO controllerDTO = new PetDTO();
+        controllerDTO.setId(pet.getId());
+        controllerDTO.setType(pet.getType());
+        controllerDTO.setName(pet.getName());
+        controllerDTO.setBirthDate(pet.getBirthDate());
+        controllerDTO.setNotes(pet.getNotes());
         if (pet.getCustomer() != null) {
-            petDTO.setOwnerId(pet.getCustomer().getId());
+            controllerDTO.setOwnerId(pet.getCustomer().getId());
         }
-        return petDTO;
+        return controllerDTO;
     }
 }

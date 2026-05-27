@@ -1,7 +1,6 @@
 package com.udacity.jdnd.course3.critter.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
