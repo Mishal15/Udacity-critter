@@ -24,12 +24,12 @@ public class UserController {
     private EmployeesService employeeService;
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        customer.setName(customerDTO.getName());
-        customer.setPhoneNumber(customerDTO.getPhoneNumber());
-        customer.setNotes(customerDTO.getNotes());
+        Customer cController = new Customer();
+        cController.setName(customerDTO.getName());
+        cController.setPhoneNumber(customerDTO.getPhoneNumber());
+        cController.setNotes(customerDTO.getNotes());
 
-        Customer savedCustomer = customerService.saveCustomer(customer);
+        Customer savedCustomer = customerService.saveCustomer(cController);
         return convertCustomerToDTO(savedCustomer);
     }
     @GetMapping("/customer")
@@ -72,26 +72,26 @@ public class UserController {
                 .collect(Collectors.toList());
     }
     private CustomerDTO convertCustomerToDTO(Customer customer) {
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setId(customer.getId());
-        customerDTO.setName(customer.getName());
-        customerDTO.setPhoneNumber(customer.getPhoneNumber());
-        customerDTO.setNotes(customer.getNotes());
+        CustomerDTO cControllerDTO = new CustomerDTO();
+        cControllerDTO.setId(customer.getId());
+        cControllerDTO.setName(customer.getName());
+        cControllerDTO.setPhoneNumber(customer.getPhoneNumber());
+        cControllerDTO.setNotes(customer.getNotes());
         if (customer.getPets() != null) {
-            customerDTO.setPetIds(customer.getPets().stream()
+            cControllerDTO.setPetIds(customer.getPets().stream()
                     .map(Pet::getId)
                     .collect(Collectors.toList()));
         } else {
-            customerDTO.setPetIds(new ArrayList<>());
+            cControllerDTO.setPetIds(new ArrayList<>());
         }
-        return customerDTO;
+        return cControllerDTO;
     }
     private EmployeeDTO convertEmployeeToDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setName(employee.getName());
-        employeeDTO.setSkills(employee.getSkills());
-        employeeDTO.setDaysAvailable(employee.getDaysAvailable());
-        return employeeDTO;
+        EmployeeDTO eControllerDTO = new EmployeeDTO();
+        eControllerDTO.setId(employee.getId());
+        eControllerDTO.setName(employee.getName());
+        eControllerDTO.setSkills(employee.getSkills());
+        eControllerDTO.setDaysAvailable(employee.getDaysAvailable());
+        return eControllerDTO;
     }
 }

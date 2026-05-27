@@ -18,11 +18,11 @@ public class ScheduleController {
     private SchedulesService scheduleService;
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        Schedule schedule = new Schedule();
-        schedule.setDate(scheduleDTO.getDate());
-        schedule.setActivities(scheduleDTO.getActivities());
+        Schedule sController = new Schedule();
+        sController.setDate(scheduleDTO.getDate());
+        sController.setActivities(scheduleDTO.getActivities());
 
-        Schedule savedSchedule = scheduleService.createSchedule(schedule,
+        Schedule savedSchedule = scheduleService.createSchedule(sController,
                 scheduleDTO.getEmployeeIds(), scheduleDTO.getPetIds());
         return convertScheduleToDTO(savedSchedule);
     }
@@ -55,27 +55,27 @@ public class ScheduleController {
                 .collect(Collectors.toList());
     }
     private ScheduleDTO convertScheduleToDTO(Schedule schedule) {
-        ScheduleDTO scheduleDTO = new ScheduleDTO();
-        scheduleDTO.setId(schedule.getId());
-        scheduleDTO.setDate(schedule.getDate());
-        scheduleDTO.setActivities(schedule.getActivities());
+        ScheduleDTO sControllerDTO = new ScheduleDTO();
+        sControllerDTO.setId(schedule.getId());
+        sControllerDTO.setDate(schedule.getDate());
+        sControllerDTO.setActivities(schedule.getActivities());
 
         if (schedule.getEmployees() != null) {
-            scheduleDTO.setEmployeeIds(schedule.getEmployees().stream()
+            sControllerDTO.setEmployeeIds(schedule.getEmployees().stream()
                     .map(Employee::getId)
                     .collect(Collectors.toList()));
         } else {
-            scheduleDTO.setEmployeeIds(new ArrayList<>());
+            sControllerDTO.setEmployeeIds(new ArrayList<>());
         }
 
         if (schedule.getPets() != null) {
-            scheduleDTO.setPetIds(schedule.getPets().stream()
+            sControllerDTO.setPetIds(schedule.getPets().stream()
                     .map(Pet::getId)
                     .collect(Collectors.toList()));
         } else {
-            scheduleDTO.setPetIds(new ArrayList<>());
+            sControllerDTO.setPetIds(new ArrayList<>());
         }
 
-        return scheduleDTO;
+        return sControllerDTO;
     }
 }
